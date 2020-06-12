@@ -1,0 +1,8 @@
+# Compiled python
+__pycache__/
+.pyc
+.pyo
+
+# Miscellaneous directories
+TempTest/
+venv/
