@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from . import database
 from . import pubsub
+import global_settings
 import json
 
 bp = Blueprint('discovery',__name__)
@@ -14,7 +15,7 @@ def discoverDevices():
 @bp.route('/discovery/ajax', methods=['POST'])
 def requestIDs():
     if request.method == "POST":
-        db = database.DBConnection('./WebServer/meta.db')
+        db = database.DBConnection(global_settings.WEBSERVER_DIR + 'meta.db')
         # Decode JSON data and convert to python list
         data = json.dumps(request.data.decode('utf-8'))
         # Remove ids from the list that do not correspond to supported devices
@@ -28,7 +29,7 @@ def requestIDs():
     return json.dumps(request.data.decode('utf-8'))
 
 def loadDeviceNames():
-    db = database.DBConnection('./WebServer/meta.db')
+    db = database.DBConnection(global_settings.WEBSERVER_DIR + 'meta.db')
     db.cursor.execute('SELECT manufacturer, name FROM SupportedDevices')
     devices = db.cursor.fetchall()
     displayData = list()

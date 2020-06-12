@@ -10,7 +10,7 @@ sudo apt-get update
 sudo apt-get install python3-pip python3-venv
 
 # Delete the venv if already exists
-if [-d "venv/"];
+if [ -d "venv/" ];
 then
   sudo rm -r venv/
 fi
@@ -28,7 +28,7 @@ pip3 install -r requirements.txt
 # site-packages directory and add
 # the directories to be added to the PYTHON_PATH
 # variable to the file
-if [-d "venv/lib/python3.*/site-packages/"];
+if [ -d "venv/lib/python3.*/site-packages/" ];
 then
   cd venv/lib/python3.*/site-packages/
   touch pth_directories.pth

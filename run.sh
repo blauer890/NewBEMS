@@ -14,7 +14,7 @@ export FLASK_ENV=development
 
 # Setup the db file
 cd $webserver_dir
-if [ -f "meta.db"];
+if [ -f "meta.db" ];
 then
   rm meta.db
   touch meta.db
@@ -29,8 +29,10 @@ cd $project_dir
 # Run all the agents
 cd $agent_dir
 xterm -e python3 DiscoveryAgent.py &
+# python3 DiscoveryAgent.py &
 
 # Run the server
+cd $project_dir
 flask run
 
 # Deactivate the virtual environment
