@@ -6,3 +6,6 @@ __pycache__/
 # Miscellaneous directories
 TempTest/
 venv/
+
+# Database files
+.db
