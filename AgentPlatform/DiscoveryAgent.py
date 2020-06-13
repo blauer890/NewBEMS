@@ -13,7 +13,7 @@ class DiscoveryAgent():
         self.port = port
         self.topic = topic
         self.msg = ''
-        print("Starting thread!")
+        # print("Starting thread!")
         self.subThread = threading.Thread(target=self.subscribe, args=(self.topic,))
         self.subThread.start()
 
@@ -22,14 +22,14 @@ class DiscoveryAgent():
         socket = context.socket(zmq.SUB)
         socket.connect(f"tcp://localhost:{self.port}")
         socket.setsockopt(zmq.SUBSCRIBE, topic.encode("utf-8"))
-        print("Starting main loop!")
+        # print("Starting main loop!")
         while True:
-            print("Receiving!")
+            #print("Receiving!")
             self.msg = socket.recv().decode('utf-8')
-            print(self.msg)
+            #print(self.msg)
             topic, method, args = self.msg.split()
             self.processMethod(method, args)
-            print("Sleeping!")
+            #print("Sleeping!")
             time.sleep(0.5)
         context.term()
 
@@ -41,11 +41,11 @@ class DiscoveryAgent():
         ids = json.loads(args)
         conn = sqlite3.connect(global_settings.WEBSERVER_DIR + 'meta.db')
         curs = conn.cursor()
-        print(ids)
+        #print(ids)
         for id in ids:
             curs.execute("SELECT api FROM SupportedDevices WHERE id = ?", (id,))
             api = curs.fetchone()[0]
-            print(api)
+            #print(api)
             urlList = list()
             if api is not None:
                 # The directory NewBEMS must be on the PYTHONPATH variable
@@ -56,10 +56,10 @@ class DiscoveryAgent():
                 except Exception as e:
                     pass
                 urlList = api_mod.findDevices()
-                print(urlList)
+                #print(urlList)
                 for url in urlList:
                     metadata = api_mod.findMetadata(url)
-                    print(metadata)
+                    #print(metadata)
                     self.setDeviceToActive(metadata)
         curs.close()
         conn.close()
@@ -67,23 +67,23 @@ class DiscoveryAgent():
     def setDeviceToActive(self, metadata):
         conn = sqlite3.connect(global_settings.WEBSERVER_DIR + 'meta.db')
         curs = conn.cursor()
-        print('Executing cursor!')
+        #print('Executing cursor!')
         curs.execute("SELECT id FROM ActiveDevices WHERE name = ?;", (metadata['name'],))
         result = curs.fetchall()
-        print(result)
+        #print(result)
         if result == []:
             try:
-                print('Adding device to active devices')
+                #print('Adding device to active devices')
                 curs.execute("INSERT INTO ActiveDevices (name, manufacturer, macaddress) VALUES (?, ?, ?);", (metadata['name'], metadata['manufacturer'], metadata['macaddress']))
                 # For debugging:
-                curs.execute("SELECT * FROM ActiveDevices;")
-                print("Active devices table: ")
-                print(curs.fetchall())
+                #curs.execute("SELECT * FROM ActiveDevices;")
+                #print("Active devices table: ")
+                #print(curs.fetchall())
             except Exception as e:
-                print("Insertion into active devices failed")
+                #print("Insertion into active devices failed")
                 print(e)
         curs.close()
         conn.close()
 
 if __name__ == '__main__':
-    discovery = DiscoveryAgent("5556", "discovery")
+    discoveryAgent = DiscoveryAgent("5556", "discovery")

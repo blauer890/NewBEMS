@@ -28,8 +28,8 @@ cd $project_dir
 
 # Run all the agents
 cd $agent_dir
-xterm -e python3 DiscoveryAgent.py &
-# python3 DiscoveryAgent.py &
+#xterm python3 DiscoveryAgent.py &
+python3 DiscoveryAgent.py &
 
 # Run the server
 cd $project_dir
